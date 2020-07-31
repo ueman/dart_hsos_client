@@ -16,10 +16,8 @@ class OscaAppApi {
   /// Muss aufgerufen werden, bevor irgendwas anderes
   /// in dieser Klasse genutzt werden kann.
   Future<bool> login(String username, String password) async {
-    final client = Client();
-    _loginResult = await Login.login(client, username, password);
+    _loginResult = await Login.login(Client(), username, password);
     _client = OscaAppClient(_loginResult);
-    client.close();
     return true;
   }
 
@@ -59,6 +57,8 @@ class OscaAppApi {
   }
 
   void _isClientInitialized() {
+    assert(_client != null);
+    assert(_loginResult != null);
     if (_client == null) {
       throw Exception(
           'You must call login before using any other method of this class');

@@ -55,9 +55,10 @@ class OscaAppUrlBuilder {
 
   /// liefert bei Osca nix tolles
   static String getMaterialsUrl(
-      String sessionId,
-      String objectId /* StudentEvent.id oder Appointment.id */,
-      String objectType) {
+    String sessionId,
+    String objectId /* StudentEvent.id oder Appointment.id */,
+    String objectType,
+  ) {
     if (objectType != 'EVENT' && objectType != 'TIMETABLE') {
       throw Exception(
           'objectType must be EVENT or TIMETABLE but was $objectType');

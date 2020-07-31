@@ -15,8 +15,11 @@ class Login {
     return result;
   }
 
-  static dynamic createLoginPostContent(String username, String password) {
-    return {
+  static Map<String, String> createLoginPostContent(
+    String username,
+    String password,
+  ) {
+    return <String, String>{
       'usrname': username,
       'pass': password,
       'menuno': '002298',
