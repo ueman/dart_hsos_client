@@ -8,8 +8,7 @@ import 'package:osca_dart/web/osca_web_client.dart';
 /// Webschnittstellen des Osca-Portals bereit
 class OscaWebApi {
   OscaWebApi(String fedAuthCookie)
-      : assert(fedAuthCookie != null),
-        assert(fedAuthCookie.toLowerCase().contains('fedauth')) {
+      : assert(fedAuthCookie != null){
     _client = OscaWebClient(fedAuthCookie);
   }
 
