@@ -56,7 +56,7 @@ class Appointment {
     final document = parse(xmlString);
     final rootElement = document.findElements('mgns1:Message').first;
 
-    return rootElement.findElements('mgns1:studentEvent').map((element) {
+    return rootElement.findElements('mgns1:appointment').map((element) {
       return Appointment.parse(element);
     }).toList();
   }

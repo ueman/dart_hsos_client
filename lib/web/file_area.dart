@@ -1,23 +1,23 @@
 import 'dart:convert';
+
 import 'package:osca_dart/web/models/course_file.dart';
 import 'package:osca_dart/web/osca_web_client.dart';
 
 class FileArea {
-
   /// Liefert eine Liste aller Dateien eines Moduls-Raums zurück
   /// courseID muss die courseID von einem Course sein
   static Future<List<CourseFile>> getListOfAllFilesForCourse(
-      OscaWebClient client,
-      String courseId) async {
+      OscaWebClient client, String courseId) async {
     var courseUrl = createUrlForCourse(courseId);
 
     var response = await client.get(courseUrl);
 
-    List<String> fileDescriptionUris = convertToFileDescriptionUrls(response.body);
+    List<String> fileDescriptionUris =
+        convertToFileDescriptionUrls(response.body);
 
     var courseFiles = List<CourseFile>();
 
-    // TODO das hier kann bestimmt auch noch parallel ausgeführt 
+    // TODO das hier kann bestimmt auch noch parallel ausgeführt
     // werden, dann gehts vllt fixer
     for (var fileDescriptionUri in fileDescriptionUris) {
       var response = await client.get(fileDescriptionUri);
@@ -39,7 +39,8 @@ class FileArea {
 
   static List<String> convertToFileDescriptionUrls(String content) {
     final dynamic decoded = json.decode(content);
-    final rootObject = _FileListRootObject.fromJson(decoded as Map<String, dynamic>);
+    final rootObject =
+        _FileListRootObject.fromJson(decoded as Map<String, dynamic>);
 
     return rootObject.d.results
         // aus den results nur die Dateien nehmen
@@ -53,7 +54,7 @@ class FileArea {
   static CourseFile convertToCourseFile(String content, String courseId) {
     final decoded = json.decode(content) as Map<String, dynamic>;
 
-    var someError  = decoded['error'] as String;
+    var someError = decoded['error'] as String;
     if (someError != null) {
       // TODO hier gibts irgendeinen Fehler
       // fürs erste wird der einfach ignoriert
@@ -82,7 +83,9 @@ class _FileListRootObject {
   _FileListRootObject({this.d});
 
   _FileListRootObject.fromJson(Map<String, dynamic> json) {
-    d = json['d'] != null ? new _FileListContainer.fromJson(json['d'] as Map<String, dynamic>) : null;
+    d = json['d'] != null
+        ? new _FileListContainer.fromJson(json['d'] as Map<String, dynamic>)
+        : null;
   }
 
   Map<String, dynamic> toJson() {
