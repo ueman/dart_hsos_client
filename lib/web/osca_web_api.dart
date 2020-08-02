@@ -1,4 +1,5 @@
 import 'package:osca_dart/web/announcements.dart';
+import 'package:osca_dart/web/connection_test.dart';
 import 'package:osca_dart/web/file_area.dart';
 import 'package:osca_dart/web/models/announcement.dart';
 import 'package:osca_dart/web/models/course_file.dart';
@@ -13,6 +14,11 @@ class OscaWebApi {
   }
 
   OscaWebClient _client;
+
+  /// Check um zu schauen, ob der Cookie funktioniert.
+  Future<bool> canConnect() {
+    return ConnectionTest().testConnection(_client);
+  }
 
   Future<List<CourseFile>> getListOfAllFilesForCourse(String courseId) {
     return FileArea.getListOfAllFilesForCourse(_client, courseId);
