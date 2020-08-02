@@ -15,7 +15,7 @@ class Login {
     return result;
   }
 
-  static Map<String, String> createLoginPostContent(
+  static dynamic createLoginPostContent(
     String username,
     String password,
   ) {
@@ -26,7 +26,7 @@ class Login {
       'APPNAME': 'CampusNet',
       'clino': '000000000000001',
       'persono': '00000000',
-      'platform': '',
+      'platform': ' ',
       'PRGNAME': 'LOGINCHECK',
       'ARGUMENTS': 'clino,usrname,pass,menuno,persno,browser,platform',
     };

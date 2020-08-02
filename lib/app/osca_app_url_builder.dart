@@ -1,5 +1,4 @@
-import 'package:osca_dart/app/magic/encoder.dart';
-import 'package:osca_dart/app/magic/string_utils.dart';
+import 'package:osca_dart/app/encryption/key_crypter_dart.dart';
 
 // ignore: avoid_classes_with_only_static_members
 class OscaAppUrlBuilder {
@@ -11,46 +10,40 @@ class OscaAppUrlBuilder {
   /// Der Status ist entweder STD oder DOZ
   static String personTypeUrl(String sessionId) {
     final url = 'GETPERSONTYPE,$sessionId,000000,1';
-    final urlWithMd5 = '${StringUtils.toMd5(url)},$url';
-    return '$baseUrl-A${Encoder.doMagicWithString(urlWithMd5)}';
+    return encryptUrl(url);
   }
 
   /// Baut die Stundenplan URL
   static String appointmentsUrl(String sessionId) {
     final String url = 'GETAPPOINTMENTS,$sessionId,000000,';
-    final String urlWithMd5 = StringUtils.toMd5(url) + ',' + url;
-    return '$baseUrl-A${Encoder.doMagicWithString(urlWithMd5)}';
+    return encryptUrl(url);
   }
 
   /// Baut die URL zur Abfrage von Nachrichten (quasi Ankündigungen)
   /// zusammen.
   static String messagesUrl(String sessionId) {
     final url = 'GETMESSAGES,$sessionId,000000,';
-    final urlWithMd5 = StringUtils.toMd5(url) + ',' + url;
-    return '$baseUrl-A${Encoder.doMagicWithString(urlWithMd5)}';
+    return encryptUrl(url);
   }
 
   /// Baut die URL zur Abfrage von weiteren Modul-Informationen
   static String eventInfoUrl(String sessionId, String eventId) {
     final String url = 'GETEVENTINFO,$sessionId,000000,$eventId';
-    final String urlWithMd5 = StringUtils.toMd5(url) + ',' + url;
-    return '$baseUrl-A${Encoder.doMagicWithString(urlWithMd5)}';
+    return encryptUrl(url);
   }
 
   /// Baut die URL zur Abfrage von allen Modulen
   static String eventsUrl(String sessionId, String personType) {
     validPersonType(personType);
     final String url = 'GETEVENTS,$sessionId,000000,$personType';
-    final String urlWithMd5 = StringUtils.toMd5(url) + ',' + url;
-    return '$baseUrl-A${Encoder.doMagicWithString(urlWithMd5)}';
+    return encryptUrl(url);
   }
 
   /// Baut die URL zur Abfrage von allen Noten
   static String examsUrl(String sessionId, String personType) {
     validPersonType(personType);
     final String url = 'GETEXAMS,$sessionId,000000,$personType';
-    final String urlWithMd5 = StringUtils.toMd5(url) + ',' + url;
-    return '$baseUrl-A${Encoder.doMagicWithString(urlWithMd5)}';
+    return encryptUrl(url);
   }
 
   /// liefert bei Osca nix tolles
@@ -66,8 +59,7 @@ class OscaAppUrlBuilder {
 
     final String url = 'GETMATERIAL,$sessionId,000000,$objectId,$objectType';
 
-    final String urlWithMd5 = StringUtils.toMd5(url) + ',' + url;
-    return '$baseUrl-A${Encoder.doMagicWithString(urlWithMd5)}';
+    return encryptUrl(url);
   }
 
   /// liefert bei Osca nix tolles
@@ -75,8 +67,13 @@ class OscaAppUrlBuilder {
       String sessionId, String irgendwasVomMaterial) {
     final String url =
         'GETEVENTDOWNLOAD,$sessionId,000000,$irgendwasVomMaterial';
-    final String urlWithMd5 = StringUtils.toMd5(url) + ',' + url;
-    return '$baseUrl-A${Encoder.doMagicWithString(urlWithMd5)}';
+    return encryptUrl(url);
+  }
+
+  static String encryptUrl(String url){
+    final String urlWithMd5 = KeyCrypterScrypt.md5(url) + ',' + url;
+    final encryptedUrl = KeyCrypterScrypt.encrypt(urlWithMd5);
+    return '$baseUrl-A${encryptedUrl}';
   }
 
   static void validPersonType(String personType) {

@@ -38,8 +38,8 @@ class FileArea {
       "https://osca.hs-osnabrueck.de/lms/$courseId/_api/web/lists/getByTitle('Dateibereich')/items?\$filter=startswith(ContentTypeId, '0x0101')";
 
   static List<String> convertToFileDescriptionUrls(String content) {
-    final decoded = json.decode(content);
-    final rootObject = _FileListRootObject.fromJson(decoded);
+    final dynamic decoded = json.decode(content);
+    final rootObject = _FileListRootObject.fromJson(decoded as Map<String, dynamic>);
 
     return rootObject.d.results
         // aus den results nur die Dateien nehmen
@@ -51,9 +51,9 @@ class FileArea {
   }
 
   static CourseFile convertToCourseFile(String content, String courseId) {
-    final decoded = json.decode(content);
+    final decoded = json.decode(content) as Map<String, dynamic>;
 
-    var someError  = decoded['error'];
+    var someError  = decoded['error'] as String;
     if (someError != null) {
       // TODO hier gibts irgendeinen Fehler
       // fürs erste wird der einfach ignoriert
@@ -82,7 +82,7 @@ class _FileListRootObject {
   _FileListRootObject({this.d});
 
   _FileListRootObject.fromJson(Map<String, dynamic> json) {
-    d = json['d'] != null ? new _FileListContainer.fromJson(json['d']) : null;
+    d = json['d'] != null ? new _FileListContainer.fromJson(json['d'] as Map<String, dynamic>) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -102,8 +102,8 @@ class _FileListContainer {
   _FileListContainer.fromJson(Map<String, dynamic> json) {
     if (json['results'] != null) {
       results = new List<_FileListElement>();
-      json['results'].forEach((v) {
-        results.add(new _FileListElement.fromJson(v));
+      json['results'].forEach((dynamic v) {
+        results.add(new _FileListElement.fromJson(v as Map<String, dynamic>));
       });
     }
   }

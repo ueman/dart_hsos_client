@@ -164,7 +164,7 @@ class _AnnouncementsListEntry {
         ? new _AnnouncementsListContentType.fromJson(json['ContentType'])
         : null;
     fieldValuesAsHtml = json['FieldValuesAsHtml'] != null
-        ? new _AnnouncementsListFieldValuesAsHtml.fromJson(
+        ? _AnnouncementsListFieldValuesAsHtml.fromJson(
             json['FieldValuesAsHtml'])
         : null;
     fieldValuesAsText = json['FieldValuesAsText'] != null
