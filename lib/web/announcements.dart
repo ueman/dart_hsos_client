@@ -114,7 +114,7 @@ class _AnnouncementsListEntry {
   bool attachments;
   String gUID;
   String body;
-  Null expires;
+  String expires;
 
   _AnnouncementsListEntry(
       {this.mMetadata,
