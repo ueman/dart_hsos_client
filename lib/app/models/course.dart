@@ -1,3 +1,4 @@
+import 'package:osca_dart/app/models/belongs_to_semester.dart';
 import 'package:osca_dart/app/xml_helpers.dart';
 import 'package:xml/xml.dart';
 
@@ -26,62 +27,87 @@ import 'package:xml/xml.dart';
 ///        <mgns1:infoPresent>1</mgns1:infoPresent>
 ///    </mgns1:studentEvent>
 ///</mgns1:Message>
-class Course {
-  Course();
+class Course implements BelongsToSemester {
+  Course({
+    this.courseID,
+    this.courseDataID,
+    this.courseNumber,
+    this.courseName,
+    this.eventType,
+    this.eventCategory,
+    this.semesterID,
+    this.semesterName,
+    this.creditPoints,
+    this.hoursPerWeek,
+    this.smallGroups,
+    this.courseLanguage,
+    this.facultyName,
+    this.maxStudents,
+    this.instructorsString,
+    this.moduleName,
+    this.moduleNumber,
+    this.listener,
+    this.acceptedStatus,
+    this.materialPresent,
+    this.infoPresent,
+  });
 
   factory Course.parse(XmlElement element) {
-    return Course()
-      ..courseID = int.parse(findElementOrNull(element, 'mgns1:courseID')?.text)
-      ..courseDataID = findElementOrNull(element, 'mgns1:courseDataID')?.text
-      ..courseNumber = findElementOrNull(element, 'mgns1:courseNumber')?.text
-      ..courseName = findElementOrNull(element, 'mgns1:courseName')?.text
-      ..eventType = findElementOrNull(element, 'mgns1:eventType')?.text
-      ..eventCategory = findElementOrNull(element, 'mgns1:eventCategory')?.text
-      ..semesterID = findElementOrNull(element, 'mgns1:semesterID')?.text
-      ..semesterName = findElementOrNull(element, 'mgns1:semesterName')?.text
-      ..creditPoints = findElementOrNull(element, 'mgns1:creditPoints')?.text
-      ..hoursPerWeek = findElementOrNull(element, 'mgns1:hoursPerWeek')?.text
-      ..smallGroups = findElementOrNull(element, 'mgns1:smallGroups')?.text
-      ..courseLanguage =
-          findElementOrNull(element, 'mgns1:courseLanguage')?.text
-      ..facultyName = findElementOrNull(element, 'mgns1:facultyName')?.text
-      ..maxStudents = findElementOrNull(element, 'mgns1:maxStudents')?.text
-      ..instructorsString =
-          findElementOrNull(element, 'mgns1:instructorsString')?.text
-      ..moduleName = findElementOrNull(element, 'mgns1:moduleName')?.text
-      ..moduleNumber = findElementOrNull(element, 'mgns1:moduleNumber')?.text
-      ..listener = findElementOrNull(element, 'mgns1:listener')?.text
-      ..acceptedStatus =
-          findElementOrNull(element, 'mgns1:acceptedStatus')?.text
-      ..materialPresent =
-          findElementOrNull(element, 'mgns1:materialPresent')?.text
-      ..infoPresent = findElementOrNull(element, 'mgns1:infoPresent')?.text;
+    return Course(
+      courseID: int.parse(findElementOrNull(element, 'mgns1:courseID')?.text),
+      courseDataID: findElementOrNull(element, 'mgns1:courseDataID')?.text,
+      courseNumber: findElementOrNull(element, 'mgns1:courseNumber')?.text,
+      courseName: findElementOrNull(element, 'mgns1:courseName')?.text,
+      eventType: findElementOrNull(element, 'mgns1:eventType')?.text,
+      eventCategory: findElementOrNull(element, 'mgns1:eventCategory')?.text,
+      semesterID: findElementOrNull(element, 'mgns1:semesterID')?.text,
+      semesterName: findElementOrNull(element, 'mgns1:semesterName')?.text,
+      creditPoints: findElementOrNull(element, 'mgns1:creditPoints')?.text,
+      hoursPerWeek: findElementOrNull(element, 'mgns1:hoursPerWeek')?.text,
+      smallGroups: findElementOrNull(element, 'mgns1:smallGroups')?.text,
+      courseLanguage: findElementOrNull(element, 'mgns1:courseLanguage')?.text,
+      facultyName: findElementOrNull(element, 'mgns1:facultyName')?.text,
+      maxStudents: findElementOrNull(element, 'mgns1:maxStudents')?.text,
+      instructorsString:
+          findElementOrNull(element, 'mgns1:instructorsString')?.text,
+      moduleName: findElementOrNull(element, 'mgns1:moduleName')?.text,
+      moduleNumber: findElementOrNull(element, 'mgns1:moduleNumber')?.text,
+      listener: findElementOrNull(element, 'mgns1:listener')?.text,
+      acceptedStatus: findElementOrNull(element, 'mgns1:acceptedStatus')?.text,
+      materialPresent:
+          findElementOrNull(element, 'mgns1:materialPresent')?.text,
+      infoPresent: findElementOrNull(element, 'mgns1:infoPresent')?.text,
+    );
   }
 
   /// ist leider nicht eindeutig
-  int courseID;
+  final int courseID;
 
   /// ist eindeutig
-  String courseDataID;
-  String courseNumber;
-  String courseName;
-  String eventType;
-  String eventCategory;
-  String semesterID;
-  String semesterName;
-  String creditPoints;
-  String hoursPerWeek;
-  String smallGroups;
-  String courseLanguage;
-  String facultyName;
-  String maxStudents;
-  String instructorsString;
-  String moduleName;
-  String moduleNumber;
-  String listener;
-  String acceptedStatus;
-  String materialPresent;
-  String infoPresent;
+  final String courseDataID;
+  final String courseNumber;
+  final String courseName;
+  final String eventType;
+  final String eventCategory;
+
+  @override
+  final String semesterID;
+
+  @override
+  final String semesterName;
+  final String creditPoints;
+  final String hoursPerWeek;
+  final String smallGroups;
+  final String courseLanguage;
+  final String facultyName;
+  final String maxStudents;
+  final String instructorsString;
+  final String moduleName;
+  final String moduleNumber;
+  final String listener;
+  final String acceptedStatus;
+  final String materialPresent;
+  final String infoPresent;
 
   static List<Course> fromXml(String xmlString) {
     final document = parse(xmlString);

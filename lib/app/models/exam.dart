@@ -1,6 +1,8 @@
+import 'package:osca_dart/app/models/belongs_to_semester.dart';
 import 'package:osca_dart/app/xml_helpers.dart';
 import 'package:xml/xml.dart';
 
+/// Ein Exam sieht im XML beispielsweise so aus:
 ///<mgns1:Message xmlns:mgns1="http://datenlotsen.de">
 ///    <mgns1:studentExam>
 ///        <mgns1:examID>365096437789974</mgns1:examID>
@@ -21,80 +23,108 @@ import 'package:xml/xml.dart';
 ///        <mgns1:semesterName>WiSe 2017/18</mgns1:semesterName>
 ///    </mgns1:studentExam>
 /// </mgns1:Message>
-
-class Exam {
-  Exam();
+class Exam implements BelongsToSemester {
+  Exam({
+    this.examID,
+    this.examName,
+    this.context,
+    this.contextType,
+    this.subject,
+    this.beginDate,
+    this.dueDate,
+    this.timeFrom,
+    this.timeTo,
+    this.grade,
+    this.gradeDescription,
+    this.instructorString,
+    this.status,
+    this.statusSystem,
+    this.semesterID,
+    this.semesterName,
+  });
 
   factory Exam.parse(XmlElement element) {
-    return Exam()
-      ..examID = int.parse(findElementOrNull(element, 'mgns1:examID')?.text)
-      ..examName = findElementOrNull(element, 'mgns1:examName')?.text
-      ..context = findElementOrNull(element, 'mgns1:context')?.text
-      ..contextType = findElementOrNull(element, 'mgns1:contextType')?.text
-      ..subject = findElementOrNull(element, 'mgns1:subject')?.text
-      ..beginDate = findElementOrNull(element, 'mgns1:beginDate')?.text
-      ..dueDate = findElementOrNull(element, 'mgns1:dueDate')?.text
-      ..timeFrom = findElementOrNull(element, 'mgns1:timeFrom')?.text
-      ..timeTo = findElementOrNull(element, 'mgns1:timeTo')?.text
-      ..grade = findElementOrNull(element, 'mgns1:grade')?.text
-      ..gradeDescription =
-          findElementOrNull(element, 'mgns1:gradeDescription')?.text
-      ..instructorString =
-          findElementOrNull(element, 'mgns1:instructorString')?.text
-      ..status = findElementOrNull(element, 'mgns1:status')?.text
-      ..statusSystem = findElementOrNull(element, 'mgns1:statusSystem')?.text
-      ..semesterID = findElementOrNull(element, 'mgns1:semesterID')?.text
-      ..semesterName = findElementOrNull(element, 'mgns1:semesterName')?.text;
+    return Exam(
+      examID: int.parse(findElementOrNull(element, 'mgns1:examID')?.text),
+      examName: findElementOrNull(element, 'mgns1:examName')?.text,
+      context: findElementOrNull(element, 'mgns1:context')?.text,
+      contextType: findElementOrNull(element, 'mgns1:contextType')?.text,
+      subject: findElementOrNull(element, 'mgns1:subject')?.text,
+      beginDate: findElementOrNull(element, 'mgns1:beginDate')?.text,
+      dueDate: findElementOrNull(element, 'mgns1:dueDate')?.text,
+      timeFrom: findElementOrNull(element, 'mgns1:timeFrom')?.text,
+      timeTo: findElementOrNull(element, 'mgns1:timeTo')?.text,
+      grade: findElementOrNull(element, 'mgns1:grade')?.text,
+      gradeDescription:
+          findElementOrNull(element, 'mgns1:gradeDescription')?.text,
+      instructorString:
+          findElementOrNull(element, 'mgns1:instructorString')?.text,
+      status: findElementOrNull(element, 'mgns1:status')?.text,
+      statusSystem: findElementOrNull(element, 'mgns1:statusSystem')?.text,
+      semesterID: findElementOrNull(element, 'mgns1:semesterID')?.text,
+      semesterName: findElementOrNull(element, 'mgns1:semesterName')?.text,
+    );
   }
 
-  int examID;
+  final int examID;
 
   /// Name der Prüfung, also Abschlussarbeit/Kolloquium/Prüfungsleistung
-  String examName;
+  final String examName;
 
   /// Name des Moduls
-  String context;
+  final String context;
+
+  String get realName {
+    // context sieht beispielweise so aus:
+    // "11B0192-2-PR-EuI Grundlagen Programmierung (Praktikum) - Gr. 1MI"
+    // Wir wollen aber den Foo ab dem ersten Space.
+    return context.split(' ').skip(1).join(' ');
+  }
 
   /// Modul, Kurs oder so
-  String contextType;
-  String subject;
+  final String contextType;
+
+  final String subject;
 
   /// Im Format 20.11.2017
-  String beginDate;
+  final String beginDate;
 
   /// Im Format 20.11.2017
-  String dueDate;
+  final String dueDate;
 
   /// Im Format 12:00
-  String timeFrom;
+  final String timeFrom;
 
   /// Im Format 12:00
-  String timeTo;
+  final String timeTo;
 
   /// Note als Zahl, zB. 1,7
-  String grade;
+  final String grade;
 
   /// Textuelle Beschreibung der Note
   /// z.B: sehr gut, gut, etc
-  String gradeDescription;
+  final String gradeDescription;
 
   /// Name des Lehrenden
-  String instructorString;
+  final String instructorString;
 
   /// Textuelle beschreibung von statusSystem
-  String status;
+  final String status;
 
   /// Typ des Status
+  /// 0 = noch nicht veröffentlicht
   /// 1 = bestanden
   /// 2 = noch nicht veröffentlicht
   /// 3 = nicht bestanden
   /// 4 = entschuldigt
-  String statusSystem;
+  final String statusSystem;
 
-  String semesterID;
+  @override
+  final String semesterID;
 
   /// Name des Semester, "WiSe18/19"
-  String semesterName;
+  @override
+  final String semesterName;
 
   static List<Exam> fromXml(String xmlString) {
     final document = parse(xmlString);
