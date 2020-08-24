@@ -1,3 +1,6 @@
+import 'dart:typed_data';
+
+import 'package:osca_dart/app/models/course.dart';
 import 'package:osca_dart/web/announcements.dart';
 import 'package:osca_dart/web/connection_test.dart';
 import 'package:osca_dart/web/file_area.dart';
@@ -8,12 +11,16 @@ import 'package:osca_dart/web/osca_web_client.dart';
 /// Stellt einen HttpClienten speziell für die
 /// Webschnittstellen des Osca-Portals bereit
 class OscaWebApi {
-  OscaWebApi(String fedAuthCookie)
-      : assert(fedAuthCookie != null){
+  OscaWebApi(String fedAuthCookie) : assert(fedAuthCookie != null) {
     _client = OscaWebClient(fedAuthCookie);
   }
 
   OscaWebClient _client;
+
+  Future<Uint8List> loadFile(CourseFile file) async {
+    final response = await _client.get(file.downloadUrl());
+    return response.bodyBytes;
+  }
 
   /// Check um zu schauen, ob der Cookie funktioniert.
   Future<bool> canConnect() {
